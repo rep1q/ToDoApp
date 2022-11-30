@@ -9,6 +9,12 @@ import UIKit
 
 class ToDoTableViewController: UITableViewController {
 
+    
+    var objects = [
+        ToDo(Logo: "Hi", Title: "Name: Bob", Subscription: "Surname: Not Stupid Man", isFavourite: false, isDone: false),
+        ToDo(Logo: "HUI", Title: "Name: Poshel", Subscription: "Surname: NaHUI", isFavourite: false, isDone: false)
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -16,9 +22,9 @@ class ToDoTableViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.title = "My To Do App"
+        self.title = "I NEED TO DO GLIcK GLIcK"
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     // MARK: - Table view data source
@@ -30,62 +36,69 @@ class ToDoTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 5
+        return objects.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text="\(indexPath)"
-        // Configure the cell...
+        let cell = tableView.dequeueReusableCell(withIdentifier: "toDoCell", for: indexPath) as! CellTableViewCell
+        
+        let object = objects[indexPath.row]
+        cell.set(object:object)
 
         return cell
     }
     
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
+        if editingStyle == .delete{
+            objects.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
         return true
     }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedCell = objects.remove(at: sourceIndexPath.row)
+        objects.insert(movedCell, at: destinationIndexPath.row)
+        tableView.reloadData()
     }
-    */
-
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let done = doneAction(at: indexPath)
+        let favourite = favouriteAction(at: indexPath)
+        return UISwipeActionsConfiguration(actions: [done, favourite])
+    }
+   
+    func doneAction(at indexPath: IndexPath)->UIContextualAction{
+        var object = objects[indexPath.row]
+        let action = UIContextualAction(style: .destructive, title: "Done") { action, view, completion in
+            object.isDone = !object.isDone
+            self.objects[indexPath.row] = object
+//            self.objects.remove(at: indexPath.row)
+//            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            completion(true)
+        }
+        action.backgroundColor = .systemGreen
+        action.image = object.isDone ? UIImage(systemName: "circle") : UIImage(systemName: "checkmark.circle")
+        return action
+    }
+    
+    func favouriteAction(at indexPath: IndexPath) -> UIContextualAction{
+        var object = objects[indexPath.row]
+        let action = UIContextualAction(style: .normal, title: "Favourite") { action, view, completion in
+            object.isFavourite = !object.isFavourite
+            self.objects[indexPath.row] = object
+            completion(true)
+        }
+        action.backgroundColor = object.isFavourite ? .systemPurple: .systemGray
+        action.image = UIImage(systemName: "heart")
+        return action
+    }
+    
 }

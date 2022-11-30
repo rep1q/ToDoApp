@@ -16,7 +16,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="69" id="o0P-vK-t6s">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="toDoCell" rowHeight="69" id="o0P-vK-t6s" customClass="CellTableViewCell" customModule="ToDoApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="50" width="414" height="69"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="o0P-vK-t6s" id="8IN-VH-EQ1">
@@ -59,6 +59,11 @@
                                         <constraint firstItem="uPd-VX-nhc" firstAttribute="top" secondItem="8IN-VH-EQ1" secondAttribute="top" constant="8" id="pSD-Iq-AW5"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="SubScription" destination="jyr-Av-aUB" id="5Ru-og-34r"/>
+                                    <outlet property="Title" destination="7r2-9W-Epa" id="NZP-2r-7OO"/>
+                                    <outlet property="logo" destination="QBK-tT-4gk" id="bfC-iw-BEj"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
